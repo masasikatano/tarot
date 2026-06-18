@@ -43,12 +43,15 @@ src/
     CardPicker.tsx
     ReadingResult.tsx
   lib/
-    tarotData.ts       # 78枚のカードデータ（フォールバック）
+    tarotData.ts       # 78枚のカードデータ
     tarotApi.ts        # 外部 Tarot API クライアント
     prompts.ts         # システムプロンプト
     rateLimit.ts
     api-response.ts
   styles/global.css
+
+public/
+  cards/               # RWS タロット画像 78枚（Wikimedia Commons パブリックドメイン）
 
 wrangler.toml
 astro.config.mjs
@@ -56,6 +59,6 @@ astro.config.mjs
 
 ## 注意事項
 
-- 画像は Wikimedia Commons の RWS パブリックドメイン画像を参照
+- 画像は `public/cards/` にローカル配置した Wikimedia Commons の RWS パブリックドメイン画像を配信
 - この結果はエンターテイメント・内省のきっかけであり、専門的な助言ではありません
 - `vite` は Astro 6 との互換性のため `^7.3.5` に固定（`package.json` の `overrides` を参照）

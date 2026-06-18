@@ -23,16 +23,16 @@ function shuffleDeck(): TarotCard[] {
   return deck;
 }
 
-function createFaceDownCards(spread: SpreadType): { card: TarotCard; revealed: boolean }[] {
+function createFaceDownCards(spread: SpreadType): { card: TarotCard; revealed: boolean; reversed: boolean }[] {
   const deck = shuffleDeck();
   const count = spread === 'single' ? 5 : 7;
-  return deck.slice(0, count).map((card) => ({ card, revealed: false }));
+  return deck.slice(0, count).map((card) => ({ card, revealed: false, reversed: false }));
 }
 
 export default function TarotApp() {
   const [spread, setSpread] = useState<SpreadType | null>(null);
   const [worry, setWorry] = useState('');
-  const [faceDownCards, setFaceDownCards] = useState<{ card: TarotCard; revealed: boolean }[] | null>(null);
+  const [faceDownCards, setFaceDownCards] = useState<{ card: TarotCard; revealed: boolean; reversed: boolean }[] | null>(null);
   const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
   const [startedReading, setStartedReading] = useState(false);
   const [reading, setReading] = useState('');
@@ -55,20 +55,25 @@ export default function TarotApp() {
     const needed = spread === 'single' ? 1 : 3;
     if (drawnCards.length >= needed) return;
 
+    const reversed = Math.random() < 0.5;
+
     const next = [...faceDownCards];
-    next[index] = { ...next[index], revealed: true };
+    next[index] = { ...next[index], revealed: true, reversed };
     setFaceDownCards(next);
 
     const drawn: DrawnCard = {
       card: next[index].card,
-      reversed: Math.random() < 0.5,
+      reversed,
       position: drawnCards.length,
     };
     const updatedDrawn = [...drawnCards, drawn];
     setDrawnCards(updatedDrawn);
 
     if (updatedDrawn.length === needed) {
-      void runReading(spread, updatedDrawn);
+      const flipDelay = needed === 1 ? 900 : 600;
+      setTimeout(() => {
+        void runReading(spread, updatedDrawn);
+      }, flipDelay);
     }
   };
 
@@ -82,11 +87,16 @@ export default function TarotApp() {
     setError(null);
   };
 
-  async function runReading(currentSpread: SpreadType, cards: DrawnCard[]) {
+  async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
+    const maxRetries = 3;
+    const retryDelayMs = 2000;
+
     setStartedReading(true);
     setIsStreaming(true);
     setError(null);
-    setReading('');
+    if (attempt === 1) {
+      setReading('');
+    }
 
     const payload = {
       spread: currentSpread,
@@ -144,9 +154,21 @@ export default function TarotApp() {
       }
     } catch (e) {
       const err = e as { message?: string };
-      setError(err?.message || '通信エラーが発生しました。');
+      console.error('Reading error', { attempt, message: err?.message });
+
+      if (attempt < maxRetries) {
+        setError(`占い師が解釈を熟考しています…（${attempt}/${maxRetries}）`);
+        setTimeout(() => {
+          void runReading(currentSpread, cards, attempt + 1);
+        }, retryDelayMs);
+        return;
+      }
+
+      setError(err?.message || '占いに失敗しました。');
     } finally {
-      setIsStreaming(false);
+      if (attempt >= maxRetries) {
+        setIsStreaming(false);
+      }
     }
   }
 

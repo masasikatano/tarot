@@ -1,6 +1,6 @@
 // Rider-Waite-Smith (RWS) 78-card deck.
-// Images are public-domain files hosted on Wikimedia Commons,
-// accessed via the Special:FilePath redirect.
+// Images are public-domain files from Wikimedia Commons,
+// served locally from public/cards/.
 
 export interface TarotCard {
   name: string;
@@ -10,14 +10,14 @@ export interface TarotCard {
   keywordsReversed: string[];
 }
 
-const WIKIMEDIA_FILEPATH = 'https://commons.wikimedia.org/wiki/Special:FilePath';
+const CARD_IMAGE_PATH = '/cards';
 
 function major(num: number, name: string, nameJp: string, keywords: string[], keywordsReversed: string[]): TarotCard {
   const padded = num.toString().padStart(2, '0');
   return {
     name,
     nameJp,
-    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS1909 - ${padded} ${name}.jpeg`,
+    imageUrl: `${CARD_IMAGE_PATH}/RWS1909 - ${padded} ${name}.jpeg`,
     keywords,
     keywordsReversed,
   };
@@ -36,7 +36,7 @@ function minor(
   return {
     name: `${rank} of ${suit}`,
     nameJp: `${suitJp}の${nameJp}`,
-    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS1909 - ${suit} ${rankNum}.jpeg`,
+    imageUrl: `${CARD_IMAGE_PATH}/RWS1909 - ${suit} ${rankNum}.jpeg`,
     keywords,
     keywordsReversed,
   };
