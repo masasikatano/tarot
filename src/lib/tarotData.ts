@@ -17,7 +17,7 @@ function major(num: number, name: string, nameJp: string, keywords: string[], ke
   return {
     name,
     nameJp,
-    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS_Tarot_${padded}_${name.replace(/\s+/g, '_')}.jpg`,
+    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS1909 - ${padded} ${name}.jpeg`,
     keywords,
     keywordsReversed,
   };
@@ -31,10 +31,12 @@ function minor(
   keywordsReversed: string[],
 ): TarotCard {
   const suitJp = suit === 'Wands' ? 'ワンド' : suit === 'Cups' ? 'カップ' : suit === 'Swords' ? 'ソード' : 'ペンタクル';
+  const rankNum =
+    rank === 'Page' ? '11' : rank === 'Knight' ? '12' : rank === 'Queen' ? '13' : rank === 'King' ? '14' : rank;
   return {
     name: `${rank} of ${suit}`,
     nameJp: `${suitJp}の${nameJp}`,
-    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS_Tarot_${suit}_${rank}.jpg`,
+    imageUrl: `${WIKIMEDIA_FILEPATH}/RWS1909 - ${suit} ${rankNum}.jpeg`,
     keywords,
     keywordsReversed,
   };
