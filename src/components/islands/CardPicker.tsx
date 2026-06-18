@@ -41,13 +41,6 @@ export default function CardPicker({ spread, cards, drawnCount, onPick }: Props)
 
   return (
     <div className="card-picker">
-      <h2 className="picker-title">
-        背面のカードから{needed}枚選んでください
-      </h2>
-      <p className="picker-subtitle">
-        直感で選んだカードが、あなたへのメッセージになります。
-      </p>
-
       <div className="card-grid">
         {cards.map((item, index) => {
           const isRevealed = item.revealed;

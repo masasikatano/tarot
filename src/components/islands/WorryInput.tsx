@@ -6,16 +6,16 @@ interface Props {
 export default function WorryInput({ value, onChange }: Props) {
   return (
     <div className="worry-input">
-      <label htmlFor="worry" className="worry-label">
-        悩みや状況があれば、ここに書いてください
-      </label>
+      {/* <label htmlFor="worry" className="worry-label">
+        
+      </label> */}
       <textarea
         id="worry"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="例：最近仕事の方向性に迷っていて…"
+        placeholder="タロットに聞きたいことがあれば記入（任意）"
         className="worry-textarea"
-        rows={3}
+        rows={1}
         maxLength={1000}
       />
     </div>

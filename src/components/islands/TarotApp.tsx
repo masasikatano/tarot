@@ -31,8 +31,8 @@ function createFaceDownCards(): { card: TarotCard; revealed: boolean; reversed: 
 
 export default function TarotApp() {
   const [spread, setSpread] = useState<SpreadType | null>(null);
-  const [worry, setWorry] = useState('');
   const [faceDownCards, setFaceDownCards] = useState<{ card: TarotCard; revealed: boolean; reversed: boolean }[] | null>(null);
+  const [worry, setWorry] = useState('');
   const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
   const [startedReading, setStartedReading] = useState(false);
   const [reading, setReading] = useState('');
@@ -190,19 +190,24 @@ export default function TarotApp() {
               タロットで内側を覗いてみましょう。
             </p>
             <SpreadSelector onSelect={handleSelectSpread} />
-            <div className="mt-5">
-              <WorryInput value={worry} onChange={setWorry} />
-            </div>
           </div>
         )}
 
         {spread !== null && !startedReading && (
-          <CardPicker
-            spread={spread}
-            cards={faceDownCards ?? []}
-            drawnCount={drawnCards.length}
-            onPick={handlePickCard}
-          />
+          <div className="reading-setup">
+            <h2 className="picker-title">
+              背面のカードから{spread === 'single' ? 1 : 3}枚選んでください
+            </h2>
+            <div className="mb-1">
+              <WorryInput value={worry} onChange={setWorry} />
+            </div>
+            <CardPicker
+              spread={spread}
+              cards={faceDownCards ?? []}
+              drawnCount={drawnCards.length}
+              onPick={handlePickCard}
+            />
+          </div>
         )}
 
         {startedReading && (
