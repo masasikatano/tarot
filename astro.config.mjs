@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, sessionDrivers } from 'astro/config';
 import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
@@ -7,6 +7,11 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://tarot.scryer.workers.dev',
+
+  session: {
+    // @ts-ignore — runtime driver exists; typing lags behind unstorage exports.
+    driver: sessionDrivers.memory(),
+  },
   output: 'server',
   adapter: cloudflare(),
   integrations: [react()],
