@@ -1,4 +1,4 @@
-# ScryTarot
+# TarotScryer
 
 ライダー・ウェイト・スミス（Rider-Waite-Smith）タロットを用いた、現実的で心理学的な内省のための Web サービス。
 

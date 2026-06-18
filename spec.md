@@ -1,11 +1,11 @@
-# ScryTarot 仕様書
+# TarotScryer 仕様書
 
 > **作成背景**: Matt Pocock の "grill-me" メソッド（深掘り質問による要件明確化）により複数ラウンドで採択された仕様を記録したもの。
 > このドキュメントが本プロジェクトの **Single Source of Truth** となる。
 
 ## 1. 製品概要
 
-**製品名**: ScryTarot
+**製品名**: TarotScryer
 
 **コンセプト**:  
 スピリチュアル志向のユーザー向けに、ライダー・ウェイト・スミス（Rider-Waite-Smith）タロットを用いた、現実的で心理学的な内省を促す Web サービス。  
@@ -24,10 +24,10 @@
 ## 2. Grill-me メソッドで採択された主要決定事項
 
 ### 2.1 ブランディング・名称
-- **採択**: 「ScryTarot」
-  - scry（水晶で覗き見る）+ tarot（タロット）の造語
-- URL: `https://scrytarot.workers.dev`
-- Worker 名: `scrytarot`（`wrangler.toml`）
+- **採択**: 「TarotScryer」
+  - tarot（タロット）+ scry（水晶で覗き見る）の造語
+- URL: `https://tarot.scryer.workers.dev`
+- Worker 名: `tarot`（`wrangler.toml`）
 - リポジトリ: `/home/masasikatano/project/project`（本プロジェクト）
 
 ### 2.2 ターゲットユーザー
@@ -144,7 +144,7 @@
 | IP レートリミット | 未実装 | `src/lib/rateLimit.ts` |
 | Tarot API 連携 | 未実装 | 外部 API + 自前フォールバック |
 | Google Analytics | 未実装 | 必要に応じて Layout.astro へ追加 |
-| デプロイ（Workers） | 未実装 | `npm run deploy` → scrytarot.workers.dev |
+| デプロイ（Workers） | 未実装 | `npm run deploy` → tarot.scryer.workers.dev |
 
 ### 4.1 MVP 非採用（将来検討）
 - 結果のコピー/画像化/SNS シェア
@@ -180,7 +180,7 @@ src/
   styles/
     global.css                # ライトモード、携帯特化
 
-wrangler.toml                 # name = "scrytarot"
+wrangler.toml                 # name = "tarot"
 astro.config.mjs              # server output + cloudflare adapter + env schema
 ```
 

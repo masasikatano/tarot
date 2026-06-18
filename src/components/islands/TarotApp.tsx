@@ -175,7 +175,7 @@ export default function TarotApp() {
   return (
     <div className="tarot-app">
       <header className="tarot-header">
-        <div className="text-[17px] font-semibold tracking-[-0.2px]">ScryTarot</div>
+        <div className="text-[17px] font-semibold tracking-[-0.2px]">TarotScryer</div>
         <button onClick={handleReset} className="reset-btn" aria-label="最初からやり直す">
           最初から
         </button>
@@ -185,7 +185,7 @@ export default function TarotApp() {
         {spread === null && (
           <div className="intro">
             <div className="text-3xl mb-2">🔮</div>
-            <h1 className="text-[21px] font-semibold tracking-tight mb-1.5">ScryTarot</h1>
+            <h1 className="text-[21px] font-semibold tracking-tight mb-1.5">TarotScryer</h1>
             <p className="text-[#555] text-[13.5px] leading-relaxed mb-5">
               タロットで内側を覗いてみましょう。
             </p>

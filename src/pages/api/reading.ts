@@ -88,7 +88,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const model = LLM_MODEL || 'openrouter/free';
-  const referer = 'https://tarot.scry.workers.dev';
+  const referer = 'https://tarot.scryer.workers.dev';
 
   const messages = [
     { role: 'system' as const, content: SYSTEM_PROMPT },
@@ -104,7 +104,7 @@ export const POST: APIRoute = async ({ request }) => {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': referer,
-          'X-Title': 'ScryTarot',
+          'X-Title': 'TarotScryer',
         },
         body: JSON.stringify({
           model,

@@ -5,8 +5,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>ScryTarot — 内省のためのタロット</title>
+		<title>TarotScryer — 内省のためのタロット</title>
 		<meta name="description" content="ライダー・ウェイト・スミスのタロットで、現実的で心理学的な内省を。1枚引き・3枚引きで今日の気づきを受け取ります。" />
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-MCGJFEE12K" is:inline></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-MCGJFEE12K');
+		</script>
 	</head>
 	<body>
 		<slot />
