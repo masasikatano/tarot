@@ -23,9 +23,9 @@ function shuffleDeck(): TarotCard[] {
   return deck;
 }
 
-function createFaceDownCards(spread: SpreadType): { card: TarotCard; revealed: boolean; reversed: boolean }[] {
+function createFaceDownCards(): { card: TarotCard; revealed: boolean; reversed: boolean }[] {
   const deck = shuffleDeck();
-  const count = spread === 'single' ? 5 : 7;
+  const count = 9;
   return deck.slice(0, count).map((card) => ({ card, revealed: false, reversed: false }));
 }
 
@@ -41,7 +41,7 @@ export default function TarotApp() {
 
   const handleSelectSpread = (selected: SpreadType) => {
     setSpread(selected);
-    setFaceDownCards(createFaceDownCards(selected));
+    setFaceDownCards(createFaceDownCards());
     setDrawnCards([]);
     setStartedReading(false);
     setReading('');
