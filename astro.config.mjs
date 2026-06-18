@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://tarot.scry.workers.dev',
+  site: 'https://tarot.scryer.workers.dev',
   output: 'server',
   adapter: cloudflare(),
   integrations: [react()],
