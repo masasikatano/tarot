@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { TarotCard } from '@/lib/tarotData';
 import { CARDS } from '@/lib/tarotData';
 import SpreadSelector from './SpreadSelector';
@@ -46,6 +46,7 @@ function createFaceDownCards(): { card: TarotCard; revealed: boolean; reversed: 
 }
 
 export default function TarotApp() {
+  const mainRef = useRef<HTMLElement>(null);
   const [spread, setSpread] = useState<SpreadType | null>(null);
   const [faceDownCards, setFaceDownCards] = useState<{ card: TarotCard; revealed: boolean; reversed: boolean }[] | null>(null);
   const [worry, setWorry] = useState('');
@@ -114,6 +115,7 @@ export default function TarotApp() {
     setStartedReading(false);
     setReading('');
     setError(null);
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSwitchToThree = () => {
@@ -123,6 +125,7 @@ export default function TarotApp() {
     setStartedReading(false);
     setReading('');
     setError(null);
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
@@ -197,7 +200,7 @@ export default function TarotApp() {
         </button>
       </header>
 
-      <main className="tarot-main">
+      <main ref={mainRef} className="tarot-main">
         {spread === null && (
           <>
             <div className="intro">

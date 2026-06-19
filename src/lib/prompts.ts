@@ -23,7 +23,7 @@ export const SINGLE_CARD_SCHEMA = {
     disclaimer: {
       type: 'string',
       description:
-        'A short disclaimer in Japanese stating tarot is not an absolute answer.',
+        'A short disclaimer in Japanese stating the tarot reading is just one interpretation.',
     },
   },
 } as const;
@@ -72,7 +72,7 @@ export const THREE_CARD_SCHEMA = {
     disclaimer: {
       type: 'string',
       description:
-        'A short disclaimer in Japanese stating tarot is not an absolute answer.',
+        'A short disclaimer in Japanese stating the tarot reading is just one interpretation.',
     },
   },
 } as const;
@@ -104,7 +104,7 @@ export type ReadingResult = SingleCardReading | ThreeCardReading;
  * Uses XML tags, imperative MUST/SHOULD/MUST NOT rules, and an injected JSON schema.
  */
 export const SYSTEM_PROMPT = `You are a friendly female tarot reader.
-Your role is to provide realistic, psychological, and caring tarot interpretations.
+Your role is to provide caring tarot interpretations.
 
 <core_belief>
 - Tarot is NOT a tool for predicting the future.
