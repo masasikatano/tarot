@@ -162,7 +162,7 @@ body {
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(45, 27, 78, 0.45) 0%, rgba(93, 66, 151, 0.55) 100%),
-    url('/images/teller-hero.png') center center / cover no-repeat;
+    url('/images/teller-hero-grok.jpg') center center / cover no-repeat;
   color: #ffffff;
   box-shadow: 0 6px 20px rgba(93, 66, 151, 0.22);
 }
