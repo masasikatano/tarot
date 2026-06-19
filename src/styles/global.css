@@ -108,17 +108,18 @@ body {
 
 /* Footer */
 .tarot-footer {
-  flex-shrink: 0;
-  background: var(--footer-bg);
-  color: #fff;
+  background: #f7f5fb;
+  color: #888;
   padding: 16px;
+  margin-top: 40px;
   text-align: center;
   font-size: 11px;
   line-height: 1.55;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .tarot-footer a {
-  color: var(--footer-text);
+  color: var(--text-muted);
   text-decoration: none;
 }
 
@@ -745,14 +746,13 @@ body {
 }
 
 .retry-btn {
-  background: linear-gradient(to bottom, var(--cta-red-start), var(--cta-red-end));
-  color: #fff;
-  box-shadow: 0 3px 0 #481414, 0 4px 10px rgba(138, 2, 2, 0.25);
+  background: #fff;
+  color: var(--accent-purple);
+  border: 1.5px solid var(--accent-purple);
 }
 
 .retry-btn:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 #481414, 0 2px 6px rgba(138, 2, 2, 0.25);
+  background: var(--surface-lavender);
 }
 
 .save-share-row {

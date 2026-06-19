@@ -255,12 +255,12 @@ export default function TarotApp() {
             onRetry={handleRetry}
           />
         )}
-      </main>
 
-      <footer className="tarot-footer">
-        <div>タロットは内省のきっかけであり、専門的な助言ではありません。</div>
-        <div>© TarotScryer</div>
-      </footer>
+        <footer className="tarot-footer">
+          <div>タロットは内省のきっかけであり、専門的な助言ではありません。</div>
+          <div>© TarotScryer</div>
+        </footer>
+      </main>
     </div>
   );
 }
