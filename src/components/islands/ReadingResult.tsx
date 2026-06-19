@@ -99,7 +99,7 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
     <div className="reading-result">
       <div ref={captureRef} className="capture-target">
         <h2 className="result-title">
-          {spread === 'single' ? '今日のメッセージ' : '内省スプレッド'}
+          <span>{spread === 'single' ? '今日のメッセージ' : '内省スプレッド'}</span>
         </h2>
 
         <div className="result-cards">

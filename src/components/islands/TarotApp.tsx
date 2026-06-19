@@ -206,8 +206,8 @@ export default function TarotApp() {
 
   return (
     <div className="tarot-app">
-      <header className="tarot-header">
-        <div className="text-[17px] font-semibold tracking-[-0.2px]">TarotScryer</div>
+      <header className={`tarot-header ${spread === null ? 'tarot-header--hero' : ''}`}>
+        <div className="text-[17px] font-bold tracking-tight">TarotScryer</div>
         <button onClick={handleReset} className="reset-btn" aria-label="最初からやり直す">
           最初から
         </button>
@@ -215,14 +215,17 @@ export default function TarotApp() {
 
       <main className="tarot-main">
         {spread === null && (
-          <div className="intro">
-            <div className="text-3xl mb-2">🔮</div>
-            <h1 className="text-[21px] font-semibold tracking-tight mb-1.5">TarotScryer</h1>
-            <p className="text-[#555] text-[13.5px] leading-relaxed mb-5">
-              タロットで内側を覗いてみましょう。
-            </p>
+          <>
+            <div className="intro">
+              <div className="hero-icon" aria-hidden="true">🔮</div>
+              <h1 className="hero-title">タロットで内側を覗く</h1>
+              <p className="hero-subtitle">
+                今日のメッセージを、カードと一緒に受け取りましょう。
+              </p>
+            </div>
+            <div className="section-divider"><span>リーディングを選ぶ</span></div>
             <SpreadSelector onSelect={handleSelectSpread} />
-          </div>
+          </>
         )}
 
         {spread !== null && !startedReading && (
@@ -253,6 +256,11 @@ export default function TarotApp() {
           />
         )}
       </main>
+
+      <footer className="tarot-footer">
+        <div>タロットは内省のきっかけであり、専門的な助言ではありません。</div>
+        <div>© TarotScryer</div>
+      </footer>
     </div>
   );
 }

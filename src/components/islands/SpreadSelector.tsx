@@ -13,9 +13,11 @@ export default function SpreadSelector({ onSelect }: Props) {
         className="spread-card"
         aria-label="今日のメッセージを1枚引く"
       >
-        <div className="spread-icon">☀️</div>
-        <div className="spread-title">今日のメッセージ</div>
-        <div className="spread-desc">1枚引き</div>
+        <div className="spread-icon" aria-hidden="true">☀️</div>
+        <div>
+          <div className="spread-title">今日のメッセージ</div>
+          <div className="spread-desc">1枚引きで、今必要な言葉を受け取る</div>
+        </div>
       </button>
       <button
         type="button"
@@ -23,9 +25,11 @@ export default function SpreadSelector({ onSelect }: Props) {
         className="spread-card"
         aria-label="内省スプレッドを3枚引く"
       >
-        <div className="spread-icon">🌙</div>
-        <div className="spread-title">内省スプレッド</div>
-        <div className="spread-desc">3枚：状況・課題・助言</div>
+        <div className="spread-icon" aria-hidden="true">🌙</div>
+        <div>
+          <div className="spread-title">内省スプレッド</div>
+          <div className="spread-desc">3枚：状況・課題・助言</div>
+        </div>
       </button>
     </div>
   );
