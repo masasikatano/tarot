@@ -147,7 +147,7 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
 
         {canShowActions && (
           <p className="disclaimer">
-            占いは利用者の特定の目的に適合すること、期待する結果・価値・正確性・実現性を有すること及び利用者に不都合が生じないことについて、何らの保証をするものではありません。
+            タロットは未来を決定づけるものではなく、内省のきっかけとしてご活用ください。
           </p>
         )}
       </div>

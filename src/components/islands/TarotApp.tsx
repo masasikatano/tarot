@@ -139,51 +139,18 @@ export default function TarotApp() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok || !res.body) {
-        const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as { reading?: string; error?: string };
+
+      if (!res.ok) {
         throw new Error(data?.error || `サーバーエラー (${res.status})`);
       }
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let buffer = '';
-      let rawContent = '';
-      let filteredContent = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed || trimmed === 'data: [DONE]') continue;
-          if (trimmed.startsWith('data: ')) {
-            const jsonStr = trimmed.slice(6);
-            try {
-              const data = JSON.parse(jsonStr);
-              const delta = data?.choices?.[0]?.delta?.content;
-              if (typeof delta === 'string' && delta.length > 0) {
-                rawContent += delta;
-                const newFiltered = removeSafetyClassifications(rawContent);
-                if (newFiltered !== filteredContent) {
-                  filteredContent = newFiltered;
-                  setReading(filteredContent);
-                }
-              }
-            } catch {
-              // ignore partial lines
-            }
-          }
-        }
-      }
-
-      if (!filteredContent.trim()) {
+      const readingText = data?.reading ? removeSafetyClassifications(data.reading) : '';
+      if (!readingText.trim()) {
         throw new Error('解釈の内容が空でした。');
       }
+
+      setReading(readingText);
     } catch (e) {
       const err = e as { message?: string };
       console.error('Reading error', { attempt, message: err?.message });
@@ -257,7 +224,7 @@ export default function TarotApp() {
         )}
 
         <footer className="tarot-footer">
-          <div>タロットは内省のきっかけであり、専門的な助言ではありません。</div>
+          <div>占いは利用者の特定の目的に適合すること、期待する結果・正確性・実現性を有すること及び不都合が生じない事について、何らの保証をするものではありません。</div>
           <div>© TarotScryer</div>
         </footer>
       </main>

@@ -2,7 +2,13 @@ import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { jsonResponse } from '@/lib/api-response';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
-import { SYSTEM_PROMPT } from '@/lib/prompts';
+import {
+  getSystemPrompt,
+  readingToMarkdown,
+  SingleCardReadingSchema,
+  ThreeCardReadingSchema,
+  type ReadingResult,
+} from '@/lib/prompts';
 import { OPENROUTER_API_KEY, LLM_MODEL } from 'astro:env/server';
 
 const CardSchema = z.object({
@@ -43,8 +49,15 @@ function buildUserPrompt(spread: 'single' | 'three', cards: z.infer<typeof BodyS
     prompt += `\nユーザーからの悩み・状況:\n${worry.trim()}\n`;
   }
 
-  prompt += '\n上記のカードを使って、現実的で心理学的な解釈をしてください。';
+  prompt += '\n上記のカードを使って、指定されたJSONスキーマに従った解釈を出力してください。';
   return prompt;
+}
+
+function validateReading(spread: 'single' | 'three', data: unknown): ReadingResult {
+  if (spread === 'single') {
+    return SingleCardReadingSchema.parse(data);
+  }
+  return ThreeCardReadingSchema.parse(data);
 }
 
 async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
@@ -91,7 +104,7 @@ export const POST: APIRoute = async ({ request }) => {
   const referer = 'https://tarot.scryer.workers.dev';
 
   const messages = [
-    { role: 'system' as const, content: SYSTEM_PROMPT },
+    { role: 'system' as const, content: getSystemPrompt(spread) },
     { role: 'user' as const, content: buildUserPrompt(spread, cards, worry) },
   ];
 
@@ -109,15 +122,16 @@ export const POST: APIRoute = async ({ request }) => {
         body: JSON.stringify({
           model,
           messages,
-          stream: true,
+          stream: false,
           temperature: 0.7,
           max_tokens: 1200,
+          response_format: { type: 'json_object' },
         }),
       },
       REQUEST_TIMEOUT_MS,
     );
 
-    if (!upstreamRes.ok || !upstreamRes.body) {
+    if (!upstreamRes.ok) {
       const errorText = await upstreamRes.text().catch(() => '');
       console.error('OpenRouter upstream error', {
         status: upstreamRes.status,
@@ -131,15 +145,35 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    return new Response(upstreamRes.body, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-        'X-Accel-Buffering': 'no',
-      },
-    });
+    const upstreamData = (await upstreamRes.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+      error?: { message?: string };
+    };
+
+    const content = upstreamData.choices?.[0]?.message?.content;
+    if (!content) {
+      console.error('OpenRouter returned empty content', { upstreamData, model });
+      return jsonResponse(
+        { error: '解釈の内容を取得できませんでした。もう一度お試しください。' },
+        { status: 502 },
+      );
+    }
+
+    let parsedJson: unknown;
+    try {
+      parsedJson = JSON.parse(content);
+    } catch (parseErr) {
+      console.error('Failed to parse LLM JSON', { content: content.slice(0, 500), model, parseErr });
+      return jsonResponse(
+        { error: '解釈の形式が正しくありませんでした。もう一度お試しください。' },
+        { status: 502 },
+      );
+    }
+
+    const reading = validateReading(spread, parsedJson);
+    const markdown = readingToMarkdown(reading, spread);
+
+    return jsonResponse({ reading: markdown });
   } catch (err: unknown) {
     const error = err as { name?: string; message?: string };
     console.error('Reading proxy error', { name: error?.name, message: error?.message, model });
