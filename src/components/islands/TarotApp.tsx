@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { TarotCard } from '@/lib/tarotData';
 import { CARDS } from '@/lib/tarotData';
 import SpreadSelector from './SpreadSelector';
@@ -47,6 +47,8 @@ function createFaceDownCards(): { card: TarotCard; revealed: boolean; reversed: 
 
 export default function TarotApp() {
   const mainRef = useRef<HTMLElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [spread, setSpread] = useState<SpreadType | null>(null);
   const [faceDownCards, setFaceDownCards] = useState<{ card: TarotCard; revealed: boolean; reversed: boolean }[] | null>(null);
   const [worry, setWorry] = useState('');
@@ -57,12 +59,18 @@ export default function TarotApp() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSelectSpread = (selected: SpreadType) => {
+    abortControllerRef.current?.abort();
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
     setSpread(selected);
     setFaceDownCards(createFaceDownCards());
     setDrawnCards([]);
     setStartedReading(false);
     setReading('');
     setError(null);
+    setIsStreaming(false);
   };
 
   const handlePickCard = (index: number) => {
@@ -88,13 +96,20 @@ export default function TarotApp() {
 
     if (updatedDrawn.length === needed) {
       const flipDelay = needed === 1 ? 900 : 600;
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         void runReading(spread, updatedDrawn);
       }, flipDelay);
+      retryTimeoutRef.current = timeoutId;
     }
   };
 
   const handleReset = () => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
     setSpread(null);
     setWorry('');
     setFaceDownCards(null);
@@ -102,35 +117,57 @@ export default function TarotApp() {
     setStartedReading(false);
     setReading('');
     setError(null);
+    setIsStreaming(false);
   };
 
   const handleRetry = () => {
     if (!spread || drawnCards.length === 0) return;
+    abortControllerRef.current?.abort();
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
     void runReading(spread, drawnCards);
   };
 
   const handleRestartWithWorry = () => {
+    abortControllerRef.current?.abort();
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
     setFaceDownCards(createFaceDownCards());
     setDrawnCards([]);
     setStartedReading(false);
     setReading('');
     setError(null);
+    setIsStreaming(false);
     mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSwitchToThree = () => {
+    abortControllerRef.current?.abort();
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
     setSpread('three');
     setFaceDownCards(createFaceDownCards());
     setDrawnCards([]);
     setStartedReading(false);
     setReading('');
     setError(null);
+    setIsStreaming(false);
     mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
     const maxRetries = 5;
     const retryDelayMs = 2000;
+
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     setStartedReading(true);
     setIsStreaming(true);
@@ -158,6 +195,7 @@ export default function TarotApp() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
       const retryAfterHeader = res.headers.get('Retry-After');
@@ -181,7 +219,12 @@ export default function TarotApp() {
 
       setReading(readingText);
     } catch (e) {
-      const err = e as { message?: string };
+      const err = e as { name?: string; message?: string };
+      if (err.name === 'AbortError') {
+        console.log('Reading request aborted');
+        return;
+      }
+
       console.error('Reading error', { attempt, message: err?.message, retryAfterMs });
 
       if (attempt < maxRetries) {
@@ -191,7 +234,7 @@ export default function TarotApp() {
         setError(
           `占い師が解釈を熟考しています…（${attempt}/${maxRetries}）${Math.round(delay / 1000)}秒後に再試行します`,
         );
-        setTimeout(() => {
+        retryTimeoutRef.current = setTimeout(() => {
           void runReading(currentSpread, cards, attempt + 1);
         }, delay);
       } else {
@@ -203,6 +246,21 @@ export default function TarotApp() {
       }
     }
   }
+
+  useEffect(() => {
+    if (startedReading) {
+      mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [startedReading]);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="tarot-app">

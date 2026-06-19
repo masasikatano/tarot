@@ -60,13 +60,23 @@ function validateReading(spread: 'single' | 'three', data: unknown): ReadingResu
   return ThreeCardReadingSchema.parse(data);
 }
 
-async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs: number,
+  externalSignal?: AbortSignal,
+): Promise<Response> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const onAbort = () => controller.abort();
+  externalSignal?.addEventListener('abort', onAbort);
+
   try {
     return await fetch(url, { ...options, signal: controller.signal });
   } finally {
     clearTimeout(timeoutId);
+    externalSignal?.removeEventListener('abort', onAbort);
   }
 }
 
@@ -129,6 +139,7 @@ export const POST: APIRoute = async ({ request }) => {
         }),
       },
       REQUEST_TIMEOUT_MS,
+      request.signal,
     );
 
     if (!upstreamRes.ok) {

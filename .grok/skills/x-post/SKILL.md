@@ -7,6 +7,8 @@ description: >
   コピペ用ブロック1つでそのまま投稿できる形式。自動投稿は行わない。
   Use when user runs /x-post or /x, asks for X投稿, Twitter outreach,
   ハッシュタグ投稿, or TarotScryer social media drafts.
+  使用方法:
+  /x @/home/masasikatano/download/tarot-result.png 教皇・正位置
 ---
 
 # X 投稿ドラフト生成（/x-post, /x）
