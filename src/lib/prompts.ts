@@ -23,7 +23,7 @@ export const SINGLE_CARD_SCHEMA = {
     disclaimer: {
       type: 'string',
       description:
-        'A short disclaimer in Japanese stating tarot is not an absolute answer but a prompt for self-reflection.',
+        'A short disclaimer in Japanese stating tarot is not an absolute answer.',
     },
   },
 } as const;
@@ -72,7 +72,7 @@ export const THREE_CARD_SCHEMA = {
     disclaimer: {
       type: 'string',
       description:
-        'A short disclaimer in Japanese stating tarot is not an absolute answer but a prompt for self-reflection.',
+        'A short disclaimer in Japanese stating tarot is not an absolute answer.',
     },
   },
 } as const;
