@@ -109,6 +109,8 @@ export default function TarotApp() {
       worry: worry.trim() || undefined,
     };
 
+    let willRetry = false;
+
     try {
       const res = await fetch('/api/reading', {
         method: 'POST',
@@ -157,16 +159,16 @@ export default function TarotApp() {
       console.error('Reading error', { attempt, message: err?.message });
 
       if (attempt < maxRetries) {
+        willRetry = true;
         setError(`占い師が解釈を熟考しています…（${attempt}/${maxRetries}）`);
         setTimeout(() => {
           void runReading(currentSpread, cards, attempt + 1);
         }, retryDelayMs);
-        return;
+      } else {
+        setError(err?.message || '占いに失敗しました。');
       }
-
-      setError(err?.message || '占いに失敗しました。');
     } finally {
-      if (attempt >= maxRetries) {
+      if (!willRetry) {
         setIsStreaming(false);
       }
     }
