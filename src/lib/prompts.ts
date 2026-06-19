@@ -130,7 +130,7 @@ Your role is to provide caring tarot interpretations.
 - Output MUST be a single valid JSON object matching the schema in <output_schema>.
 - Output MUST contain ONLY the JSON object. Do not add markdown, commentary, or code fences.
 - All string values MUST be in Japanese.
-- Use \\n line breaks inside strings for readability.
+- Use line breaks inside strings for readability.
 - For emphasis, use ***text***. Every *** opening MUST have a matching *** closing.
 - MUST NOT leave emphasis markers unclosed.
 </output_rules>
@@ -157,6 +157,16 @@ function normalizeEmphasis(text: string): string {
   return text;
 }
 
+function normalizeLineBreaks(text: string): string {
+  // Some lightweight models emit literal "\n" sequences instead of actual line breaks.
+  // Decode them so Markdown rendering treats them as real paragraphs.
+  return text.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n');
+}
+
+function normalizeText(text: string): string {
+  return normalizeLineBreaks(normalizeEmphasis(text));
+}
+
 /**
  * Convert a validated structured reading into Markdown for the existing UI.
  */
@@ -166,19 +176,19 @@ export function readingToMarkdown(reading: ReadingResult, spread: 'single' | 'th
     return [
       '## 今日のメッセージ',
       '',
-      normalizeEmphasis(r.message),
+      normalizeText(r.message),
       '',
       '## 今日からできる小さな行動',
       '',
-      normalizeEmphasis(r.action),
+      normalizeText(r.action),
       '',
-      normalizeEmphasis(r.disclaimer),
+      normalizeText(r.disclaimer),
     ].join('\n');
   }
 
   const r = reading as ThreeCardReading;
   const positionBlocks = r.positions
-    .map((p) => `## ${p.label}\n\n${normalizeEmphasis(p.message)}`)
+    .map((p) => `## ${p.label}\n\n${normalizeText(p.message)}`)
     .join('\n\n');
 
   return [
@@ -186,12 +196,12 @@ export function readingToMarkdown(reading: ReadingResult, spread: 'single' | 'th
     '',
     '## 内省の問い',
     '',
-    normalizeEmphasis(r.reflection_question),
+    normalizeText(r.reflection_question),
     '',
     '## 今日からできる小さな行動',
     '',
-    normalizeEmphasis(r.action),
+    normalizeText(r.action),
     '',
-    normalizeEmphasis(r.disclaimer),
+    normalizeText(r.disclaimer),
   ].join('\n');
 }

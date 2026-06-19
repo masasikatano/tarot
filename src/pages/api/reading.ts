@@ -124,7 +124,7 @@ export const POST: APIRoute = async ({ request }) => {
           messages,
           stream: false,
           temperature: 0.7,
-          max_tokens: 1200,
+          max_tokens: 2000,
           response_format: { type: 'json_object' },
         }),
       },
@@ -139,9 +139,23 @@ export const POST: APIRoute = async ({ request }) => {
         body: errorText.slice(0, 500),
         model,
       });
+
+      let retryAfter = 60;
+      try {
+        const errBody = JSON.parse(errorText) as {
+          error?: { metadata?: { retry_after_seconds?: number } };
+        };
+        const rawRetry = errBody?.error?.metadata?.retry_after_seconds;
+        if (typeof rawRetry === 'number' && rawRetry > 0) {
+          retryAfter = Math.ceil(rawRetry);
+        }
+      } catch {
+        // ignore parse errors
+      }
+
       return jsonResponse(
         { error: '解釈の生成に失敗しました。少し待ってからもう一度お試しください。' },
-        { status: 502 },
+        { status: 502, headers: { 'Retry-After': String(retryAfter) } },
       );
     }
 

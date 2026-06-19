@@ -129,7 +129,7 @@ export default function TarotApp() {
   };
 
   async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
-    const maxRetries = 3;
+    const maxRetries = 5;
     const retryDelayMs = 2000;
 
     setStartedReading(true);
@@ -151,6 +151,7 @@ export default function TarotApp() {
     };
 
     let willRetry = false;
+    let retryAfterMs: number | null = null;
 
     try {
       const res = await fetch('/api/reading', {
@@ -158,6 +159,14 @@ export default function TarotApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
+
+      const retryAfterHeader = res.headers.get('Retry-After');
+      if (retryAfterHeader) {
+        const seconds = parseInt(retryAfterHeader, 10);
+        if (!Number.isNaN(seconds) && seconds > 0) {
+          retryAfterMs = seconds * 1000;
+        }
+      }
 
       const data = (await res.json().catch(() => ({}))) as { reading?: string; error?: string };
 
@@ -173,16 +182,20 @@ export default function TarotApp() {
       setReading(readingText);
     } catch (e) {
       const err = e as { message?: string };
-      console.error('Reading error', { attempt, message: err?.message });
+      console.error('Reading error', { attempt, message: err?.message, retryAfterMs });
 
       if (attempt < maxRetries) {
         willRetry = true;
-        setError(`占い師が解釈を熟考しています…（${attempt}/${maxRetries}）`);
+        const baseDelay = retryDelayMs * 2 ** (attempt - 1);
+        const delay = Math.max(retryAfterMs ?? 0, baseDelay);
+        setError(
+          `占い師が解釈を熟考しています…（${attempt}/${maxRetries}）${Math.round(delay / 1000)}秒後に再試行します`,
+        );
         setTimeout(() => {
           void runReading(currentSpread, cards, attempt + 1);
-        }, retryDelayMs);
+        }, delay);
       } else {
-        setError(err?.message || '占いに失敗しました。');
+        setError('占い師が混雑しています。少し時間をおいてからもう一度お試しください。');
       }
     } finally {
       if (!willRetry) {
