@@ -108,6 +108,23 @@ export default function TarotApp() {
     void runReading(spread, drawnCards);
   };
 
+  const handleRestartWithWorry = () => {
+    setFaceDownCards(createFaceDownCards());
+    setDrawnCards([]);
+    setStartedReading(false);
+    setReading('');
+    setError(null);
+  };
+
+  const handleSwitchToThree = () => {
+    setSpread('three');
+    setFaceDownCards(createFaceDownCards());
+    setDrawnCards([]);
+    setStartedReading(false);
+    setReading('');
+    setError(null);
+  };
+
   async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
     const maxRetries = 3;
     const retryDelayMs = 2000;
@@ -220,6 +237,8 @@ export default function TarotApp() {
             isStreaming={isStreaming}
             error={error}
             onRetry={handleRetry}
+            onRestartWithWorry={handleRestartWithWorry}
+            onSwitchToThree={handleSwitchToThree}
           />
         )}
 

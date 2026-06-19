@@ -12,6 +12,8 @@ interface Props {
   isStreaming: boolean;
   error: string | null;
   onRetry: () => void;
+  onRestartWithWorry?: () => void;
+  onSwitchToThree?: () => void;
 }
 
 const POSITION_LABELS = ['状況', '課題', '助言'];
@@ -24,7 +26,7 @@ function normalizeBoldMarkers(text: string): string {
   });
 }
 
-export default function ReadingResult({ spread, drawnCards, reading, isStreaming, error, onRetry }: Props) {
+export default function ReadingResult({ spread, drawnCards, reading, isStreaming, error, onRetry, onRestartWithWorry, onSwitchToThree }: Props) {
   const captureRef = useRef<HTMLDivElement>(null);
   const imageDataUrlRef = useRef<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -154,6 +156,35 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
 
       {canShowActions && (
         <div className="result-actions">
+          {spread === 'single' ? (
+            <div className="save-share-row">
+              <button
+                type="button"
+                onClick={onRestartWithWorry}
+                disabled={generating}
+                className="action-btn action-btn-secondary"
+              >
+                悩みを書いて引き直し
+              </button>
+              <button
+                type="button"
+                onClick={onSwitchToThree}
+                disabled={generating}
+                className="action-btn action-btn-secondary"
+              >
+                3枚を引いて占う
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onRestartWithWorry}
+              disabled={generating}
+              className="action-btn action-btn-secondary"
+            >
+              悩みを書いて引き直す
+            </button>
+          )}
           <button
             type="button"
             onClick={onRetry}
