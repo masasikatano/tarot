@@ -11,6 +11,7 @@ interface Props {
   reading: string;
   isStreaming: boolean;
   error: string | null;
+  onRetry: () => void;
 }
 
 const POSITION_LABELS = ['状況', '課題', '助言'];
@@ -23,45 +24,76 @@ function normalizeBoldMarkers(text: string): string {
   });
 }
 
-export default function ReadingResult({ spread, drawnCards, reading, isStreaming, error }: Props) {
+export default function ReadingResult({ spread, drawnCards, reading, isStreaming, error, onRetry }: Props) {
   const captureRef = useRef<HTMLDivElement>(null);
-  const [sharing, setSharing] = useState(false);
+  const imageDataUrlRef = useRef<string | null>(null);
+  const [generating, setGenerating] = useState(false);
 
-  const handleShare = async () => {
-    if (!captureRef.current) return;
+  const canShowActions = !isStreaming && !error && reading;
+
+  const ensureImage = async (): Promise<string | null> => {
+    if (imageDataUrlRef.current) return imageDataUrlRef.current;
+    if (!captureRef.current) return null;
 
     try {
-      setSharing(true);
+      setGenerating(true);
       const dataUrl = await toPng(captureRef.current, {
         cacheBust: true,
         pixelRatio: 2,
         backgroundColor: '#ffffff',
       });
+      imageDataUrlRef.current = dataUrl;
+      return dataUrl;
+    } catch (e) {
+      console.error('Image generation failed', e);
+      return null;
+    } finally {
+      setGenerating(false);
+    }
+  };
 
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      const file = new File([blob], 'tarot-result.png', { type: 'image/png' });
+  const dataUrlToFile = async (dataUrl: string): Promise<File> => {
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
+    return new File([blob], 'tarot-result.png', { type: 'image/png' });
+  };
 
+  const handleSave = async () => {
+    const dataUrl = await ensureImage();
+    if (!dataUrl) return;
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'tarot-result.png';
+    link.click();
+  };
+
+  const handleShare = async () => {
+    const dataUrl = await ensureImage();
+    if (!dataUrl) return;
+
+    try {
+      const file = await dataUrlToFile(dataUrl);
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
           title: 'TarotScryer',
           text: 'タロットのリーディング結果',
         });
-      } else {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = 'tarot-result.png';
-        link.click();
+        return;
       }
     } catch (e) {
+      // ユーザーが共有シートをキャンセルした場合も含む
+      if ((e as Error)?.name === 'AbortError') return;
       console.error('Share failed', e);
-    } finally {
-      setSharing(false);
     }
-  };
 
-  const canShowShareButton = !isStreaming && !error && reading;
+    // ファイル共有未対応の場合は保存にフォールバック
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'tarot-result.png';
+    link.click();
+  };
 
   return (
     <div className="reading-result">
@@ -113,22 +145,42 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
           ) : null}
         </div>
 
-        {canShowShareButton && (
+        {canShowActions && (
           <p className="disclaimer">
             占いは利用者の特定の目的に適合すること、期待する結果・価値・正確性・実現性を有すること及び利用者に不都合が生じないことについて、何らの保証をするものではありません。
           </p>
         )}
       </div>
 
-      {canShowShareButton && (
-        <button
-          type="button"
-          onClick={handleShare}
-          disabled={sharing}
-          className="share-btn"
-        >
-          {sharing ? '画像を作成中…' : '画像で保存 / 共有'}
-        </button>
+      {canShowActions && (
+        <div className="result-actions">
+          <button
+            type="button"
+            onClick={onRetry}
+            disabled={generating}
+            className="retry-btn"
+          >
+            占い師にもう一度尋ねる
+          </button>
+          <div className="save-share-row">
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={generating}
+              className="action-btn action-btn-secondary"
+            >
+              {generating ? '作成中…' : '画像を保存'}
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              disabled={generating}
+              className="action-btn action-btn-primary"
+            >
+              {generating ? '作成中…' : '共有する'}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

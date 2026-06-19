@@ -87,6 +87,11 @@ export default function TarotApp() {
     setError(null);
   };
 
+  const handleRetry = () => {
+    if (!spread || drawnCards.length === 0) return;
+    void runReading(spread, drawnCards);
+  };
+
   async function runReading(currentSpread: SpreadType, cards: DrawnCard[], attempt = 1) {
     const maxRetries = 3;
     const retryDelayMs = 2000;
@@ -219,6 +224,7 @@ export default function TarotApp() {
             reading={reading}
             isStreaming={isStreaming}
             error={error}
+            onRetry={handleRetry}
           />
         )}
       </main>
