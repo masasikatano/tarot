@@ -1,0 +1,31 @@
+# 依存関係とビルド出力
+node_modules/
+dist/
+.astro/
+.wrangler/
+
+# キャッシュ
+*.cache
+.mf/
+.vite/
+
+# 環境ファイル
+.env
+.env.local
+.env.*.local
+
+# ログ
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# バージョン管理
+.git/
+.gitignore
+
+# 大容量アセット（必要に応じて）
+public/cards/*.png
+public/cards/*.jpg

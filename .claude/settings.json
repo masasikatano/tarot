@@ -1,0 +1,18 @@
+{
+  "project": {
+    "name": "TarotScryer",
+    "description": "Rider-Waite-Smithタロットを用いた心理学的内省Webサービス",
+    "techStack": ["Astro 6", "React 19", "Tailwind 4", "Cloudflare Workers", "OpenRouter"]
+  },
+  "commands": {
+    "build": "npm run build",
+    "check": "npm run check",
+    "dev": "npm run dev",
+    "deploy": "npm run deploy"
+  },
+  "preferences": {
+    "language": "ja",
+    "codeStyle": "minimal",
+    "testBeforeDeploy": true
+  }
+}

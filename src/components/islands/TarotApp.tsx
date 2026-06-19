@@ -14,6 +14,22 @@ export interface DrawnCard {
   position: number;
 }
 
+// OpenRouter の free モデル経由でセーフティ判定文のみ返されることがあるため、
+// 表示前に除去する（例: "User Safety: safe"）。
+const SAFETY_CLASSIFICATION_PATTERNS = [
+  /User Safety:\s*(safe|unsafe)\s*\n?/gi,
+  /Response Safety:\s*(safe|unsafe)\s*\n?/gi,
+  /Prompt Safety:\s*(safe|unsafe)\s*\n?/gi,
+  /Content Safety:\s*(safe|unsafe)\s*\n?/gi,
+];
+
+function removeSafetyClassifications(text: string): string {
+  return SAFETY_CLASSIFICATION_PATTERNS.reduce(
+    (acc, pattern) => acc.replace(pattern, ''),
+    text,
+  );
+}
+
 function shuffleDeck(): TarotCard[] {
   const deck = [...CARDS];
   for (let i = deck.length - 1; i > 0; i--) {
@@ -131,7 +147,8 @@ export default function TarotApp() {
       const reader = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
       let buffer = '';
-      let content = '';
+      let rawContent = '';
+      let filteredContent = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -150,14 +167,22 @@ export default function TarotApp() {
               const data = JSON.parse(jsonStr);
               const delta = data?.choices?.[0]?.delta?.content;
               if (typeof delta === 'string' && delta.length > 0) {
-                content += delta;
-                setReading(content);
+                rawContent += delta;
+                const newFiltered = removeSafetyClassifications(rawContent);
+                if (newFiltered !== filteredContent) {
+                  filteredContent = newFiltered;
+                  setReading(filteredContent);
+                }
               }
             } catch {
               // ignore partial lines
             }
           }
         }
+      }
+
+      if (!filteredContent.trim()) {
+        throw new Error('解釈の内容が空でした。');
       }
     } catch (e) {
       const err = e as { message?: string };
