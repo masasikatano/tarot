@@ -5,9 +5,17 @@
 export interface TarotCard {
   name: string;
   nameJp: string;
+  slug: string;
   imageUrl: string;
   keywords: string[];
   keywordsReversed: string[];
+}
+
+export function nameToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
 const CARD_IMAGE_PATH = '/cards';
@@ -17,6 +25,7 @@ function major(num: number, name: string, nameJp: string, keywords: string[], ke
   return {
     name,
     nameJp,
+    slug: nameToSlug(name),
     imageUrl: `${CARD_IMAGE_PATH}/RWS1909 - ${padded} ${name}.jpeg`,
     keywords,
     keywordsReversed,
@@ -33,9 +42,11 @@ function minor(
   const suitJp = suit === 'Wands' ? 'ワンド' : suit === 'Cups' ? 'カップ' : suit === 'Swords' ? 'ソード' : 'ペンタクル';
   const rankNum =
     rank === 'Page' ? '11' : rank === 'Knight' ? '12' : rank === 'Queen' ? '13' : rank === 'King' ? '14' : rank;
+  const name = `${rank} of ${suit}`;
   return {
-    name: `${rank} of ${suit}`,
+    name,
     nameJp: `${suitJp}の${nameJp}`,
+    slug: nameToSlug(name),
     imageUrl: `${CARD_IMAGE_PATH}/RWS1909 - ${suit} ${rankNum}.jpeg`,
     keywords,
     keywordsReversed,

@@ -10,6 +10,8 @@ npm run build
 npm run deploy
 ```
 
+ビルド時に `robots.txt`、`sitemap-index.xml`、OGP/アイコン画像、カード解説ページなどの SEO/AIO 関連アセットも生成・含まれます。本番公開後は Google Search Console でインデックス状況を確認してください。
+
 本番シークレットは以下のコマンドで設定します。
 
 ```bash

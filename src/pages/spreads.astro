@@ -1,0 +1,91 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/global.css';
+
+const title = 'タロットスプレッドの解説 — 1枚引き・3枚引き | TarotScryer';
+const description =
+  'TarotScryer で使える「今日のメッセージ（1枚引き）」と「内省スプレッド（3枚引き）」の意味、使い方、MOL を活かした問いかけを解説します。';
+---
+
+<Layout title={title} description={description}>
+  <main class="min-h-screen bg-white text-[var(--text)]">
+    <div class="max-w-2xl mx-auto px-4 py-8 md:py-12">
+      <nav aria-label="パンくずリスト" class="text-sm text-[var(--text-muted)] mb-6">
+        <ol class="flex gap-2">
+          <li><a href="/" class="underline hover:text-[var(--accent-purple)]">ホーム</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">スプレッドの解説</li>
+        </ol>
+      </nav>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-[var(--accent-purple)] mb-4">
+        タロットスプレッドの解説
+      </h1>
+      <p class="mb-10">
+        TarotScryer では、気軽に引ける「1枚引き」と、少し深く内省できる「3枚引き」の 2 つのスプレッドを用意しています。ここではそれぞれの意味と、MOL（Method of Levels）を意識した問いかけ方を紹介します。
+      </p>
+
+      <section class="mb-12" aria-labelledby="single-heading">
+        <h2 id="single-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">
+          今日のメッセージ（1枚引き）
+        </h2>
+        <p class="mb-4">
+          背面のカードから 1 枚を直感で選び、「今のあなたに必要なメッセージ」を受け取ります。朝のルーティンや、一日を振り返るときに向いています。
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>今日 1 日を意識して引く</li>
+          <li>悩みがあれば、悩み欄に簡潔に書いてから引く</li>
+          <li>出たカードのキーワードを 1 日の振り返りに使う</li>
+        </ul>
+      </section>
+
+      <section class="mb-12" aria-labelledby="three-heading">
+        <h2 id="three-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">
+          内省スプレッド（3枚引き）
+        </h2>
+        <p class="mb-4">
+          3 枚のカードを「状況 → 課題 → 助言」の順に並べて読みます。MOL の問いかけに最適な構成で、自分の内側にある矛盾や高次の目的に気づくきっかけになります。
+        </p>
+        <div class="grid gap-4 md:grid-cols-3 mb-4">
+          <div class="p-4 rounded-xl bg-[var(--surface-lavender)]">
+            <div class="font-bold text-[var(--accent-purple)] mb-1">1枚目：状況</div>
+            <p class="text-sm">今のあなたが置かれている認知状態や、目の前の流れを表します。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[var(--surface-lavender)]">
+            <div class="font-bold text-[var(--accent-purple)] mb-1">2枚目：課題</div>
+            <p class="text-sm">内側に潜む葛藤、ブロック、または見落としている視点を示します。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[var(--surface-lavender)]">
+            <div class="font-bold text-[var(--accent-purple)] mb-1">3枚目：助言</div>
+            <p class="text-sm">高次の目的に気づくための視点、今日からできる小さな行動のヒントです。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12" aria-labelledby="worry-heading">
+        <h2 id="worry-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">
+          悩みの書き方のヒント
+        </h2>
+        <p class="mb-4">
+          悩み入力は任意ですが、具体的に書くとカードの解釈があなたの状況に寄り添いやすくなります。以下のような問いかけを参考にしてください。
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>「仕事で○○な状況で、どう整理すればいいか」</li>
+          <li>「△△との関係で、私が見落としていることは？」</li>
+          <li>「今のモヤモヤの背後にある、本当に大切にしたいことは？」</li>
+        </ul>
+      </section>
+
+      <div class="text-center">
+        <a
+          href="/"
+          class="inline-block px-6 py-3 rounded-full bg-[var(--accent-purple)] text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          タロットを引いてみる
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

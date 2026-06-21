@@ -23,3 +23,6 @@ TarotScryer の実行環境に関する知識。
 
 - `vite` は Astro 6 との互換性のため `^7.3.5` に固定
 - `npm run check` を必ず実行
+- SEO/AIO 用の静的ページ（`/cards/[name]`、`/spreads`、`/about`、`/faq`、トップ）は `export const prerender = true` で事前レンダリングする
+- `astro.config.mjs` では `trailingSlash: 'never'` と `@astrojs/sitemap` を有効化している
+- ビルド時に `robots.txt`、サイトマップ、OGP/アイコン画像が生成・配信される

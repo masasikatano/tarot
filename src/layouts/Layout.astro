@@ -1,12 +1,66 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+  ldJson?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = 'TarotScryer — 内省のためのタロット',
+  description = 'ライダー・ウェイト・スミスのタロットで、現実的で心理学的な内省を。1枚引き・3枚引きで今日の気づきを受け取ります。',
+  ogImage = '/ogp-default.png',
+  ogType = 'website',
+  canonical,
+  ldJson,
+} = Astro.props;
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = new URL(ogImage, Astro.site).toString();
+
+const webSiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'TarotScryer',
+  url: Astro.site?.toString() ?? 'https://tarot.scryer.workers.dev',
+  sameAs: ['https://x.com/TarotScryer'],
+};
+
+const allLd = Array.isArray(ldJson) ? [webSiteLd, ...ldJson] : ldJson ? [webSiteLd, ldJson] : [webSiteLd];
+---
+
 <!doctype html>
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/manifest.json" />
 		<meta name="generator" content={Astro.generator} />
-		<title>TarotScryer — 内省のためのタロット</title>
-		<meta name="description" content="ライダー・ウェイト・スミスのタロットで、現実的で心理学的な内省を。1枚引き・3枚引きで今日の気づきを受け取ります。" />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<meta property="og:site_name" content="TarotScryer" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:locale" content="ja_JP" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@TarotScryer" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(allLd)} />
+
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-MCGJFEE12K" is:inline></script>
 		<script is:inline>

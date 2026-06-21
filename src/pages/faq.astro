@@ -1,0 +1,96 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/global.css';
+
+const title = 'よくある質問 — TarotScryer';
+const description =
+  'TarotScryer の使い方、タロットの解釈、MOL（Method of Levels）、SNS シェアなどに関するよくある質問と回答です。';
+
+const faqs = [
+  {
+    q: 'TarotScryer は無料で使えますか？',
+    a: 'はい、無料でご利用いただけます。サーバーサイドで OpenRouter の無料枠を利用して解釈を生成しており、12 リクエスト / 5 分のレートリミットを設けています。',
+  },
+  {
+    q: 'タロットは未来を当てるものですか？',
+    a: 'TarotScryer では、タロットを「未来を決定づける道具」ではなく「内省のきっかけ」として位置づけています。カードはあなたの内側や今の状況を映し出す鏡のような役割を果たします。',
+  },
+  {
+    q: '正位置と逆位置の違いは何ですか？',
+    a: '正位置はカードの基本的なエネルギーやメッセージを表し、逆位置はその陰影・ブロック・内面化・過剰または不足などを示唆することが多いです。ただし、必ずしも「良い・悪い」ではなく、視点の違いとして捉えます。',
+  },
+  {
+    q: 'MOL（Method of Levels）とは何ですか？',
+    a: 'MOL は知覚制御理論に基づく心理療法のアプローチで、表面的な状況の背後にある高次の目的や価値観に気づく問いかけを繰り返します。TarotScryer では、この問いかけをタロットの解釈に取り入れています。',
+  },
+  {
+    q: '占い結果を SNS にシェアできますか？',
+    a: 'はい、リーディング結果画面から画像を保存・共有できます。X などに投稿する際は、画像内の免責事項も一緒に添付されるため、ご確認のうえシェアしてください。',
+  },
+  {
+    q: '悩みを入力しないと引けませんか？',
+    a: '悩み入力は任意です。入力がなくてもカードは引けますし、入力がある場合はその文脈を反映した解釈を生成します。',
+  },
+  {
+    q: '利用できるカードは何ですか？',
+    a: 'ライダー・ウェイト・スミス（RWS）タロットの 78 枚すべてを使用しています。各カードの解説はカード名で検索いただくか、サイト内のカード解説ページをご覧ください。',
+  },
+  {
+    q: '専門的な相談（医療・心理・法律など）にも対応していますか？',
+    a: '対応していません。健康や安全、重大な決断に関する場合は、必ず適切な専門家に相談してください。TarotScryer はあくまでエンターテイメント・内省のきっかけです。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<Layout title={title} description={description} ldJson={faqLd}>
+  <main class="min-h-screen bg-white text-[var(--text)]">
+    <div class="max-w-2xl mx-auto px-4 py-8 md:py-12">
+      <nav aria-label="パンくずリスト" class="text-sm text-[var(--text-muted)] mb-6">
+        <ol class="flex gap-2">
+          <li><a href="/" class="underline hover:text-[var(--accent-purple)]">ホーム</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">よくある質問</li>
+        </ol>
+      </nav>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-[var(--accent-purple)] mb-6">
+        よくある質問
+      </h1>
+
+      <div class="space-y-6">
+        {faqs.map((faq, idx) => (
+          <section class="border-b border-[var(--border-subtle)] pb-6" aria-labelledby={`faq-${idx}`}>
+            <h2 id={`faq-${idx}`} class="text-lg font-bold text-[var(--accent-purple)] mb-2">
+              {faq.q}
+            </h2>
+            <p class="leading-relaxed">{faq.a}</p>
+          </section>
+        ))}
+      </div>
+
+      <div class="text-center mt-12">
+        <a
+          href="/"
+          class="inline-block px-6 py-3 rounded-full bg-[var(--accent-purple)] text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          タロットを引いてみる
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

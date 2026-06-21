@@ -7,3 +7,4 @@
 - Cloudflare Workers 上での API ルーティング
 - OpenRouter ストリーミング解釈の流れ
 - Method of Levels（MOL）を取り入れた解釈トーン
+- SEO/AIO 対応（`spec_seoaio.md`）：OGP、構造化データ、サイトマップ、カード解説ページ、FAQ ページなど

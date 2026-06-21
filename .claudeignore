@@ -29,3 +29,10 @@ Thumbs.db
 # 大容量アセット（必要に応じて）
 public/cards/*.png
 public/cards/*.jpg
+
+# ビルド時に生成される SEO/AIO アセット
+public/ogp-default.png
+public/apple-touch-icon.png
+public/icon-192.png
+public/icon-512.png
+src/data/card-dimensions.json

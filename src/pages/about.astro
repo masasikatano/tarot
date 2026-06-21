@@ -1,0 +1,77 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/Layout.astro';
+import '@/styles/global.css';
+
+const title = 'TarotScryer について — MOL × タロット | TarotScryer';
+const description =
+  'TarotScryer は、ライダー・ウェイト・スミス（RWS）タロットを使って、現実的で心理学的な内省を促す Web サービスです。Method of Levels（MOL）を取り入れた占い師のトーンで解説します。';
+---
+
+<Layout title={title} description={description}>
+  <main class="min-h-screen bg-white text-[var(--text)]">
+    <div class="max-w-2xl mx-auto px-4 py-8 md:py-12">
+      <nav aria-label="パンくずリスト" class="text-sm text-[var(--text-muted)] mb-6">
+        <ol class="flex gap-2">
+          <li><a href="/" class="underline hover:text-[var(--accent-purple)]">ホーム</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">About</li>
+        </ol>
+      </nav>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-[var(--accent-purple)] mb-4">
+        TarotScryer について
+      </h1>
+
+      <section class="mb-10" aria-labelledby="concept-heading">
+        <h2 id="concept-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">コンセプト</h2>
+        <p class="mb-4">
+          TarotScryer（タロットスクライヤー）は、ライダー・ウェイト・スミス（RWS）タロットを用いた、現実的で心理学的な内省のための Web サービスです。
+        </p>
+        <p class="mb-4">
+          タロットを「未来を予言する道具」ではなく、「内側を覗き、気づきを得るための鏡」として使うことを大切にしています。オカルトすぎず、心理療法的すぎず、バランスの取れた「気づきを与えるタロット」を目指しています。
+        </p>
+      </section>
+
+      <section class="mb-10" aria-labelledby="mol-heading">
+        <h2 id="mol-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">Method of Levels（MOL）とは</h2>
+        <p class="mb-4">
+          MOL は「知覚制御理論（Perceptual Control Theory）」に基づく心理療法のアプローチの一つです。表面的な状況を認めたうえで、その背後にある高次の目的や価値観に気づく問いかけを繰り返すことで、自分自身の内側の矛盾や本当に大切にしたい方向に気づくことを助けます。
+        </p>
+        <p>
+          TarotScryer では、この MOL の問いかけをタロットの解釈に織り交ぜることで、単なる「運勢」の提示ではなく、ユーザー自身が気づきを生むきっかけを提供しています。
+        </p>
+      </section>
+
+      <section class="mb-10" aria-labelledby="operator-heading">
+        <h2 id="operator-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">運営者</h2>
+        <p class="mb-2">
+          運営者は <a href="https://x.com/shiitake7919" target="_blank" rel="noopener noreferrer" class="underline hover:text-[var(--accent-purple)]">しいたけ.</a> です。
+        </p>
+        <p>
+          公式 X アカウント <a href="https://x.com/TarotScryer" target="_blank" rel="noopener noreferrer" class="underline hover:text-[var(--accent-purple)]">@TarotScryer</a> では、日本のトレンドをテーマにした 1 枚引きを共有しています。
+        </p>
+      </section>
+
+      <section class="mb-10" aria-labelledby="notes-heading">
+        <h2 id="notes-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">注意事項</h2>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>このサービスはエンターテイメント・内省のきっかけとして提供されており、専門的な助言（医療、心理、法律など）ではありません。</li>
+          <li>健康や安全、重大な人生の決断については、必ず適切な専門家に相談してください。</li>
+          <li>タロットの解釈は「絶対的な答え」ではなく、あなた自身の内省を深めるための材料です。</li>
+          <li>カード画像は Wikimedia Commons でパブリックドメインとして公開されているライダー・ウェイト・スミス（RWS）の画像を使用しています。</li>
+        </ul>
+      </section>
+
+      <div class="text-center">
+        <a
+          href="/"
+          class="inline-block px-6 py-3 rounded-full bg-[var(--accent-purple)] text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          タロットを引いてみる
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

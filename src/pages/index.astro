@@ -1,11 +1,43 @@
 ---
+export const prerender = true;
+
 import Layout from '@/layouts/Layout.astro';
 import TarotApp from '@/components/islands/TarotApp.tsx';
 import '@/styles/global.css';
+
+const title = 'TarotScryer — 内省のためのタロット';
+const description =
+  'ライダー・ウェイト・スミス（RWS）タロットで、現実的で心理学的な内省を。1枚引き・3枚引きで今日の気づきを受け取ります。';
+
+const webAppLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'TarotScryer',
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'JPY',
+  },
+  description,
+  url: 'https://tarot.scryer.workers.dev',
+  author: {
+    '@type': 'Person',
+    name: 'しいたけ.',
+    sameAs: ['https://x.com/shiitake7919'],
+  },
+};
 ---
 
-<Layout>
+<Layout title={title} description={description} ldJson={webAppLd}>
   <main class="min-h-[100dvh]">
+    <section class="sr-only">
+      <h1>内省のためのライダー・ウェイト・スミス・タロット</h1>
+      <p>
+        TarotScryer（タロットスクライヤー）は、RWS タロットを使って今日のメッセージを受け取れる無料の Web サービスです。1枚引き・3枚引き（状況・課題・助言）で、Method of Levels（MOL）を織り交ぜた現実的で心理学的な解釈を提供します。
+      </p>
+    </section>
     <TarotApp client:only="react" />
   </main>
 </Layout>

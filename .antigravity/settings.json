@@ -1,8 +1,21 @@
 {
   "project": {
     "name": "TarotScryer",
-    "description": "Rider-Waite-Smithタロットを用いた心理学的内省Webサービス",
-    "techStack": ["Astro 6", "React 19", "Tailwind 4", "Cloudflare Workers", "OpenRouter"]
+    "description": "Rider-Waite-Smithタロットを用いた心理学的内省Webサービス（SEO/AIO対応済み）",
+    "techStack": ["Astro 6", "React 19", "Tailwind 4", "Cloudflare Workers", "OpenRouter"],
+    "seoAio": {
+      "spec": "spec_seoaio.md",
+      "keyPages": ["/", "/cards/[name]", "/spreads", "/about", "/faq"],
+      "layout": "src/layouts/Layout.astro",
+      "sitemap": "dist/client/sitemap-index.xml",
+      "generatedAssets": [
+        "public/ogp-default.png",
+        "public/apple-touch-icon.png",
+        "public/icon-192.png",
+        "public/icon-512.png",
+        "src/data/card-dimensions.json"
+      ]
+    }
   },
   "commands": {
     "build": "npm run build",

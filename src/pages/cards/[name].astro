@@ -1,0 +1,127 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/Layout.astro';
+import { CARDS, type TarotCard } from '@/lib/tarotData';
+import dimensions from '@/data/card-dimensions.json';
+import '@/styles/global.css';
+
+export function getStaticPaths() {
+  return CARDS.map((card) => ({
+    params: { name: card.slug },
+    props: { card },
+  }));
+}
+
+const { card } = Astro.props as { card: TarotCard };
+const dim = dimensions[card.slug as keyof typeof dimensions] ?? { width: 400, height: 694 };
+const title = `${card.nameJp}（${card.name}）の意味 — 正位置・逆位置 | TarotScryer`;
+const description = `タロットカード「${card.nameJp}（${card.name}）」の正位置・逆位置のキーワード、MOLを織り交ぜた内省的な解釈、今日からできる小さなアクションを解説します。`;
+const canonical = new URL(`/cards/${card.slug}`, Astro.site).toString();
+const ogImage = new URL(card.imageUrl, Astro.site).toString();
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: `${card.nameJp}（${card.name}）の意味 — 正位置・逆位置`,
+  description,
+  image: ogImage,
+  author: {
+    '@type': 'Person',
+    name: 'しいたけ.',
+    sameAs: ['https://x.com/shiitake7919'],
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'TarotScryer',
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL('/favicon.svg', Astro.site).toString(),
+    },
+  },
+};
+---
+
+<Layout title={title} description={description} canonical={canonical} ogImage={ogImage} ogType="article" ldJson={articleLd}>
+  <main class="min-h-screen bg-white text-[var(--text)]">
+    <div class="max-w-2xl mx-auto px-4 py-8 md:py-12">
+      <nav aria-label="パンくずリスト" class="text-sm text-[var(--text-muted)] mb-6">
+        <ol class="flex gap-2">
+          <li><a href="/" class="underline hover:text-[var(--accent-purple)]">ホーム</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">{card.nameJp}</li>
+        </ol>
+      </nav>
+
+      <h1 class="text-2xl md:text-3xl font-bold text-[var(--accent-purple)] mb-2">
+        {card.nameJp}<span class="block text-lg md:text-xl font-normal text-[var(--text-muted)] mt-1">{card.name}</span>
+      </h1>
+
+      <figure class="my-8">
+        <img
+          src={card.imageUrl}
+          alt={`${card.nameJp}（${card.name}）のカード画像`}
+          width={dim.width}
+          height={dim.height}
+          loading="eager"
+          decoding="async"
+          class="mx-auto rounded-xl shadow-lg max-w-[280px] md:max-w-[320px] h-auto"
+        />
+        <figcaption class="text-center text-xs text-[var(--text-muted)] mt-3">
+          画像出典: Wikimedia Commons（パブリックドメイン）
+        </figcaption>
+      </figure>
+
+      <section class="mb-10" aria-labelledby="upright-heading">
+        <h2 id="upright-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">正位置の意味</h2>
+        <p class="mb-3">カードが正位置で出たとき、あなたに届けたいメッセージの方向性です。</p>
+        <ul class="flex flex-wrap gap-2">
+          {card.keywords.map((keyword) => (
+            <li class="px-3 py-1 rounded-full bg-[var(--surface-lavender)] text-[var(--accent-purple)] text-sm font-medium">{keyword}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="mb-10" aria-labelledby="reversed-heading">
+        <h2 id="reversed-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">逆位置の意味</h2>
+        <p class="mb-3">カードが逆位置で出たとき、見落としがちな影や、もうひとつの視点を示唆しています。</p>
+        <ul class="flex flex-wrap gap-2">
+          {card.keywordsReversed.map((keyword) => (
+            <li class="px-3 py-1 rounded-full bg-[var(--gold-bg-light)] text-[var(--text)] text-sm font-medium">{keyword}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="mb-10" aria-labelledby="mol-heading">
+        <h2 id="mol-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">MOL で内省する問い</h2>
+        <p class="mb-4">
+          Method of Levels（MOL）の視点を取り入れると、このカードは「今の体験の背後に、あなたが本当に大切にしているものは何か？」を問いかけているように感じられます。
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-[var(--text)]">
+          <li>このカードのキーワードの中で、今の自分に一番響いたものはどれですか？</li>
+          <li>その状態が実現すると、あなたの人生のどんな価値観が満たされる気がしますか？</li>
+          <li>もしその価値観に向き合うとしたら、今日はどんな小さな一歩が取れそうですか？</li>
+        </ul>
+      </section>
+
+      <section class="mb-10" aria-labelledby="action-heading">
+        <h2 id="action-heading" class="text-xl font-bold text-[var(--accent-purple)] mb-3">今日からできる小さな行動</h2>
+        <p>
+          タロットは「正解」を与えるものではなく、内省のきっかけです。カードのメッセージを参考に、今日 5 分だけでも試してみたいことを一つ選んでみましょう。
+        </p>
+      </section>
+
+      <div class="text-center">
+        <a
+          href="/"
+          class="inline-block px-6 py-3 rounded-full bg-[var(--accent-purple)] text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          {card.nameJp}で 1 枚引きを試す
+        </a>
+        <p class="text-xs text-[var(--text-muted)] mt-4">
+          占いはエンターテイメント・内省のきっかけであり、専門的な助言ではありません。
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>

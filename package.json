@@ -7,6 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "precheck": "tsx scripts/generate-card-dimensions.ts",
+    "prebuild": "tsx scripts/generate-card-dimensions.ts && node scripts/generate-assets.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
@@ -29,10 +31,13 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
     "@cloudflare/workers-types": "^4.20260613.1",
     "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "sharp": "^0.35.2",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "wrangler": "^4.100.0"
   },

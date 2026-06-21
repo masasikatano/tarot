@@ -35,6 +35,10 @@ npm run deploy
 src/
   layouts/Layout.astro
   pages/index.astro
+  pages/cards/[name].astro   # 78枚のカード解説ページ（prerender）
+  pages/spreads.astro        # スプレッド解説ページ
+  pages/about.astro          # サービス・MOL 紹介ページ
+  pages/faq.astro            # FAQ ページ
   pages/api/reading.ts
   components/islands/
     TarotApp.tsx
@@ -43,19 +47,41 @@ src/
     CardPicker.tsx
     ReadingResult.tsx
   lib/
-    tarotData.ts       # 78枚のカードデータ
-    tarotApi.ts        # 外部 Tarot API クライアント
-    prompts.ts         # システムプロンプト
+    tarotData.ts             # 78枚のカードデータ（slug 付き）
+    tarotApi.ts              # 外部 Tarot API クライアント
+    prompts.ts               # システムプロンプト
     rateLimit.ts
     api-response.ts
+  data/
+    card-dimensions.json     # ビルド時に生成されるカード画像サイズ
   styles/global.css
 
 public/
-  cards/               # RWS タロット画像 78枚（Wikimedia Commons パブリックドメイン）
+  cards/                     # RWS タロット画像 78枚（Wikimedia Commons パブリックドメイン）
+  ogp-default.png            # デフォルト OGP 画像（ビルド時生成）
+  apple-touch-icon.png       # ホーム画面アイコン（ビルド時生成）
+  icon-192.png
+  icon-512.png
+  robots.txt
+  manifest.json
+
+scripts/
+  generate-assets.mjs        # OGP / アイコン画像生成
+  generate-card-dimensions.ts # card-dimensions.json 生成
 
 wrangler.toml
 astro.config.mjs
 ```
+
+## SEO / AIO
+
+検索エンジン最適化（SEO）と生成 AI / LLM 検索における被引用性向上（AIO）の施策を実装済みです。詳細は `spec_seoaio.md` を参照してください。
+
+- **静的コンテンツ**: 78 枚のカード解説ページ、`/spreads`、`/about`、`/faq` を prerender 生成
+- **メタ情報**: `src/layouts/Layout.astro` で title / description / canonical / OGP / Twitter Card / JSON-LD を一元管理
+- **サイトマップ**: `@astrojs/sitemap` により `dist/client/sitemap-index.xml` を自動生成
+- **構造化データ**: `WebSite` / `WebApplication` / `Article` / `FAQPage` の JSON-LD を各ページに埋め込み
+- **生成アセット**: `npm run build` の `prebuild` で OGP 画像・アイコン・カード画像サイズ JSON を自動生成
 
 ## 注意事項
 

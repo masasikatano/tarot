@@ -1,0 +1,314 @@
+{
+  "magician": {
+    "width": 849,
+    "height": 1429
+  },
+  "fool": {
+    "width": 825,
+    "height": 1429
+  },
+  "high-priestess": {
+    "width": 819,
+    "height": 1451
+  },
+  "empress": {
+    "width": 860,
+    "height": 1455
+  },
+  "emperor": {
+    "width": 816,
+    "height": 1417
+  },
+  "lovers": {
+    "width": 814,
+    "height": 1430
+  },
+  "hierophant": {
+    "width": 832,
+    "height": 1416
+  },
+  "strength": {
+    "width": 817,
+    "height": 1413
+  },
+  "hermit": {
+    "width": 842,
+    "height": 1424
+  },
+  "chariot": {
+    "width": 838,
+    "height": 1441
+  },
+  "justice": {
+    "width": 828,
+    "height": 1441
+  },
+  "wheel-of-fortune": {
+    "width": 814,
+    "height": 1437
+  },
+  "hanged-man": {
+    "width": 812,
+    "height": 1423
+  },
+  "temperance": {
+    "width": 826,
+    "height": 1433
+  },
+  "death": {
+    "width": 831,
+    "height": 1424
+  },
+  "tower": {
+    "width": 814,
+    "height": 1424
+  },
+  "devil": {
+    "width": 849,
+    "height": 1453
+  },
+  "star": {
+    "width": 839,
+    "height": 1421
+  },
+  "sun": {
+    "width": 848,
+    "height": 1459
+  },
+  "moon": {
+    "width": 814,
+    "height": 1441
+  },
+  "world": {
+    "width": 833,
+    "height": 1418
+  },
+  "01-of-wands": {
+    "width": 815,
+    "height": 1448
+  },
+  "judgement": {
+    "width": 832,
+    "height": 1421
+  },
+  "03-of-wands": {
+    "width": 816,
+    "height": 1414
+  },
+  "02-of-wands": {
+    "width": 844,
+    "height": 1435
+  },
+  "04-of-wands": {
+    "width": 836,
+    "height": 1428
+  },
+  "05-of-wands": {
+    "width": 815,
+    "height": 1438
+  },
+  "06-of-wands": {
+    "width": 843,
+    "height": 1445
+  },
+  "07-of-wands": {
+    "width": 821,
+    "height": 1425
+  },
+  "08-of-wands": {
+    "width": 840,
+    "height": 1425
+  },
+  "10-of-wands": {
+    "width": 839,
+    "height": 1439
+  },
+  "09-of-wands": {
+    "width": 819,
+    "height": 1434
+  },
+  "knight-of-wands": {
+    "width": 833,
+    "height": 1415
+  },
+  "page-of-wands": {
+    "width": 820,
+    "height": 1423
+  },
+  "queen-of-wands": {
+    "width": 822,
+    "height": 1446
+  },
+  "01-of-cups": {
+    "width": 816,
+    "height": 1418
+  },
+  "king-of-wands": {
+    "width": 851,
+    "height": 1441
+  },
+  "03-of-cups": {
+    "width": 818,
+    "height": 1448
+  },
+  "02-of-cups": {
+    "width": 833,
+    "height": 1413
+  },
+  "04-of-cups": {
+    "width": 839,
+    "height": 1433
+  },
+  "06-of-cups": {
+    "width": 834,
+    "height": 1424
+  },
+  "05-of-cups": {
+    "width": 818,
+    "height": 1430
+  },
+  "07-of-cups": {
+    "width": 817,
+    "height": 1451
+  },
+  "08-of-cups": {
+    "width": 830,
+    "height": 1438
+  },
+  "09-of-cups": {
+    "width": 818,
+    "height": 1421
+  },
+  "10-of-cups": {
+    "width": 841,
+    "height": 1420
+  },
+  "queen-of-cups": {
+    "width": 820,
+    "height": 1425
+  },
+  "page-of-cups": {
+    "width": 817,
+    "height": 1436
+  },
+  "knight-of-cups": {
+    "width": 836,
+    "height": 1436
+  },
+  "king-of-cups": {
+    "width": 838,
+    "height": 1424
+  },
+  "01-of-swords": {
+    "width": 826,
+    "height": 1443
+  },
+  "02-of-swords": {
+    "width": 839,
+    "height": 1432
+  },
+  "03-of-swords": {
+    "width": 818,
+    "height": 1418
+  },
+  "05-of-swords": {
+    "width": 816,
+    "height": 1434
+  },
+  "04-of-swords": {
+    "width": 834,
+    "height": 1418
+  },
+  "06-of-swords": {
+    "width": 842,
+    "height": 1440
+  },
+  "08-of-swords": {
+    "width": 838,
+    "height": 1428
+  },
+  "07-of-swords": {
+    "width": 816,
+    "height": 1433
+  },
+  "09-of-swords": {
+    "width": 817,
+    "height": 1453
+  },
+  "page-of-swords": {
+    "width": 818,
+    "height": 1430
+  },
+  "10-of-swords": {
+    "width": 846,
+    "height": 1453
+  },
+  "knight-of-swords": {
+    "width": 837,
+    "height": 1419
+  },
+  "queen-of-swords": {
+    "width": 819,
+    "height": 1452
+  },
+  "king-of-swords": {
+    "width": 846,
+    "height": 1442
+  },
+  "01-of-pentacles": {
+    "width": 819,
+    "height": 1423
+  },
+  "04-of-pentacles": {
+    "width": 843,
+    "height": 1449
+  },
+  "02-of-pentacles": {
+    "width": 833,
+    "height": 1423
+  },
+  "03-of-pentacles": {
+    "width": 817,
+    "height": 1443
+  },
+  "06-of-pentacles": {
+    "width": 840,
+    "height": 1415
+  },
+  "05-of-pentacles": {
+    "width": 823,
+    "height": 1412
+  },
+  "07-of-pentacles": {
+    "width": 818,
+    "height": 1444
+  },
+  "08-of-pentacles": {
+    "width": 839,
+    "height": 1452
+  },
+  "09-of-pentacles": {
+    "width": 817,
+    "height": 1420
+  },
+  "10-of-pentacles": {
+    "width": 834,
+    "height": 1434
+  },
+  "page-of-pentacles": {
+    "width": 816,
+    "height": 1438
+  },
+  "queen-of-pentacles": {
+    "width": 825,
+    "height": 1431
+  },
+  "knight-of-pentacles": {
+    "width": 844,
+    "height": 1440
+  },
+  "king-of-pentacles": {
+    "width": 839,
+    "height": 1419
+  }
+}

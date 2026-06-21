@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { toPng } from 'html-to-image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -39,6 +38,7 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
 
     try {
       setGenerating(true);
+      const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(captureRef.current, {
         cacheBust: true,
         pixelRatio: 2,
