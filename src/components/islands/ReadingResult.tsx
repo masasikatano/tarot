@@ -54,10 +54,20 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
     }
   };
 
+  const getFileName = (): string => {
+    const today = new Date();
+    const ymd = today.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).replace(/\//g, '');
+    return `tarot-result-${ymd}.png`;
+  };
+
   const dataUrlToFile = async (dataUrl: string): Promise<File> => {
     const response = await fetch(dataUrl);
     const blob = await response.blob();
-    return new File([blob], 'tarot-result.png', { type: 'image/png' });
+    return new File([blob], getFileName(), { type: 'image/png' });
   };
 
   const handleSave = async () => {
@@ -66,7 +76,7 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
 
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = 'tarot-result.png';
+    link.download = getFileName();
     link.click();
   };
 
@@ -93,7 +103,7 @@ export default function ReadingResult({ spread, drawnCards, reading, isStreaming
     // ファイル共有未対応の場合は保存にフォールバック
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = 'tarot-result.png';
+    link.download = getFileName();
     link.click();
   };
 
