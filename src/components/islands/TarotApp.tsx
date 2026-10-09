@@ -14,7 +14,7 @@ export interface DrawnCard {
   position: number;
 }
 
-// OpenRouter の free モデル経由でセーフティ判定文のみ返されることがあるため、
+// LLM の応答にセーフティ判定文のみ返されることがあるため、
 // 表示前に除去する（例: "User Safety: safe"）。
 const SAFETY_CLASSIFICATION_PATTERNS = [
   /User Safety:\s*(safe|unsafe)\s*\n?/gi,

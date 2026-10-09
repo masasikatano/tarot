@@ -9,7 +9,7 @@ import {
   ThreeCardReadingSchema,
   type ReadingResult,
 } from '@/lib/prompts';
-import { OPENROUTER_API_KEY, LLM_MODEL } from 'astro:env/server';
+import { GROQ_API_KEY, LLM_MODEL } from 'astro:env/server';
 
 const CardSchema = z.object({
   name: z.string().min(1),
@@ -24,7 +24,7 @@ const BodySchema = z.object({
   worry: z.string().max(1000).optional(),
 });
 
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const REQUEST_TIMEOUT_MS = 45000;
 const RATE_LIMIT = 12;
 const RATE_WINDOW_MS = 5 * 60 * 1000;
@@ -103,15 +103,14 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const { spread, cards, worry } = parsed.data;
-  const apiKey = OPENROUTER_API_KEY;
+  const apiKey = GROQ_API_KEY;
 
   if (!apiKey) {
-    console.error('OPENROUTER_API_KEY is not configured');
+    console.error('GROQ_API_KEY is not configured');
     return jsonResponse({ error: 'サーバーの準備ができていません。しばらくしてからお試しください。' }, { status: 500 });
   }
 
-  const model = LLM_MODEL || 'openrouter/free';
-  const referer = 'https://tarot.scryer.workers.dev';
+  const model = LLM_MODEL || 'openai/gpt-oss-20b';
 
   const messages = [
     { role: 'system' as const, content: getSystemPrompt(spread) },
@@ -120,14 +119,12 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     const upstreamRes = await fetchWithTimeout(
-      OPENROUTER_URL,
+      GROQ_URL,
       {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': referer,
-          'X-Title': 'TarotScryer',
         },
         body: JSON.stringify({
           model,
@@ -144,7 +141,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (!upstreamRes.ok) {
       const errorText = await upstreamRes.text().catch(() => '');
-      console.error('OpenRouter upstream error', {
+      console.error('Groq upstream error', {
         status: upstreamRes.status,
         statusText: upstreamRes.statusText,
         body: errorText.slice(0, 500),
@@ -177,7 +174,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const content = upstreamData.choices?.[0]?.message?.content;
     if (!content) {
-      console.error('OpenRouter returned empty content', { upstreamData, model });
+      console.error('Groq returned empty content', { upstreamData, model });
       return jsonResponse(
         { error: '解釈の内容を取得できませんでした。もう一度お試しください。' },
         { status: 502 },

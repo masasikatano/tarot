@@ -1,6 +1,6 @@
 // IP-based rate limiting (in-memory per isolate).
 // Adapted from ai/.agents/skills/cloudflare-worker.md
-// Sufficient for protecting free-tier OpenRouter credits at low volume.
+// Limits low-volume usage of the server-side LLM provider.
 
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 

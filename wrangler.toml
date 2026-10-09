@@ -4,8 +4,8 @@ workers_dev = true
 preview_urls = true    
 
 # Public vars (if any) go in [vars]. Secrets use `wrangler secret put`
-# OPENROUTER_API_KEY  (required, secret)
-# LLM_MODEL (optional override)
+# GROQ_API_KEY  (required, secret)
+# LLM_MODEL (optional override; default openai/gpt-oss-20b)
 
 [vars]
 # No public vars needed for MVP (all LLM config is secret/runtime)

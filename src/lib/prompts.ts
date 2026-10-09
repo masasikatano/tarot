@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const DEFAULT_MODEL = 'openrouter/free';
+export const DEFAULT_MODEL = 'openai/gpt-oss-20b';
 
 /**
  * JSON schema for a single-card reading.
@@ -100,7 +100,7 @@ export type ThreeCardReading = z.infer<typeof ThreeCardReadingSchema>;
 export type ReadingResult = SingleCardReading | ThreeCardReading;
 
 /**
- * Formal system prompt optimized for lightweight LLMs such as openrouter/free.
+ * Formal system prompt optimized for compact LLMs such as GPT-OSS 20B.
  * Uses XML tags, imperative MUST/SHOULD/MUST NOT rules, and an injected JSON schema.
  */
 export const SYSTEM_PROMPT = `You are a friendly female tarot reader.

@@ -2,18 +2,18 @@
 
 ライダー・ウェイト・スミス（Rider-Waite-Smith）タロットを用いた、現実的で心理学的な内省のための Web サービス。
 
-**Astro 6 + React 19 Islands + Tailwind 4 + Cloudflare Workers + OpenRouter ストリーミング**
+**Astro 6 + React 19 Islands + Tailwind 4 + Cloudflare Workers + Groq**
 
 - **UI**: ライトモード、携帯特化、背面カードから直感的に選択
 - **スプレッド**: 1枚引き（今日のメッセージ）/ 3枚引き（状況・課題・助言）
 - **解釈**: Method of Levels（MOL）を織り交ぜた、親しみやすい女性占い師のトーン
-- **LLM**: OpenRouter 無料枠（`openrouter/free`）をサーバーサイドでプロキシ
+- **LLM**: Groq（`openai/gpt-oss-20b`）をサーバーサイドでプロキシ
 - **レートリミット**: IP ベース（12リクエスト / 5分）
 
 ## 開発
 
 ```bash
-cp .env.example .env   # OPENROUTER_API_KEY を設定
+cp .env.example .env   # GROQ_API_KEY を設定
 npm install
 npm run check          # 必須
 npm run dev            # http://localhost:4321
@@ -24,8 +24,8 @@ npm run deploy         # wrangler deploy
 **本番シークレット設定**
 
 ```bash
-npx wrangler secret put OPENROUTER_API_KEY
-npx wrangler secret put LLM_MODEL   # openrouter/free
+npx wrangler secret put GROQ_API_KEY
+npx wrangler secret put LLM_MODEL   # openai/gpt-oss-20b（省略時はこのモデル）
 npm run deploy
 ```
 

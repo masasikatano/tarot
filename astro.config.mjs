@@ -24,18 +24,18 @@ export default defineConfig({
   ],
   env: {
     schema: {
-      // Server-only secret. Set via wrangler secret put OPENROUTER_API_KEY
-      OPENROUTER_API_KEY: envField.string({
+      // Server-only secret. Set via wrangler secret put GROQ_API_KEY
+      GROQ_API_KEY: envField.string({
         context: 'server',
         access: 'secret',
       }),
       // Optional: override default model.
-      // Recommended for free tier: "openrouter/free"
+      // Defaults to Groq's GPT-OSS 20B model.
       LLM_MODEL: envField.string({
         context: 'server',
         access: 'secret',
         optional: true,
-        default: 'openrouter/free',
+        default: 'openai/gpt-oss-20b',
       }),
     },
   },

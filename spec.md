@@ -19,7 +19,7 @@
 **価値提案**:
 - オカルトすぎず、心理療法的すぎず、バランスの取れた「気づきを与えるタロット」
 - 背面カードから直感的に選ぶ、占いの儀式感を残した UI
-- 無料枠の OpenRouter + 公開 Tarot API を活用し、低コストで運用可能
+- Groq + 公開 Tarot API を活用し、低コストで運用可能
 
 ## 2. Grill-me メソッドで採択された主要決定事項
 
@@ -70,19 +70,19 @@
 - 解釈文（MOL ベースの現実的・心理学的解釈）
 - アドバイス（今日からできる小さな行動）
 
-### 2.7 LLM / OpenRouter 関連
-- **API キー運用**: 開発者が取得した OpenRouter の無料枠/クレジットを使用
+### 2.7 LLM / Groq 関連
+- **API キー運用**: Groq API を使用
   - サーバーサイドで保持（クライアントには渡さない）
   - 無料枠保護のため **IP ベースのレートリミット** を必須で実装
 - **モデル設定**:
-  - ローカル `.env` と本番で `LLM_MODEL=openrouter/free` を統一使用
-  - デフォルト（未設定時）: `openrouter/free`
-  - 本番設定: `npx wrangler secret put LLM_MODEL`（値に `openrouter/free`）
+  - ローカル `.env` と本番で `LLM_MODEL=openai/gpt-oss-20b` を使用
+  - デフォルト（未設定時）: `openai/gpt-oss-20b`
+  - 本番設定: `npx wrangler secret put LLM_MODEL`（値に `openai/gpt-oss-20b`）
 - **LLM の役割**:
   - カードの固定された意味を組み合わせ、自然な解釈文を生成
   - MOL（Method of Levels）の問いかけを織り交ぜる
   - 入力された悩みがあれば、それを反映させる
-- **ストリーミング**: 必須（レスポンシブな体験のため）
+- **応答形式**: JSON 応答をサーバー側で検証し、画面表示用 Markdown に変換
 
 ### 2.8 Tarot API
 - **第一選択**: 公開 Tarot API（例：tarotapi.dev）からカードデータを取得
@@ -124,7 +124,7 @@
 
 ### 3.3 エラーハンドリング
 - すべての API レスポンスは `{ error: string }` 形式
-- 外部 API 呼び出し（OpenRouter, Tarot API）には必ず `AbortController` でタイムアウト設定
+- 外部 API 呼び出し（Groq, Tarot API）には必ず `AbortController` でタイムアウト設定
 - Tarot API 失敗時は自前データへフォールバック
 
 ## 4. 現在の実装スコープ（MVP）
@@ -139,7 +139,7 @@
 | カードイラスト表示 | 未実装 | Rider-Waite-Smith 画像 |
 | キーワード・解釈文・アドバイス | 未実装 | LLM 生成 |
 | MOL ベース解釈 | 未実装 | システムプロンプトで制御 |
-| ストリーミング応答 | 未実装 | OpenRouter SSE pass-through |
+| ストリーミング応答 | 未実装 | 現在は Groq の非ストリーミング JSON 応答を利用 |
 | 任意の悩み入力 | 未実装 | テキストエリア |
 | IP レートリミット | 未実装 | `src/lib/rateLimit.ts` |
 | Tarot API 連携 | 未実装 | 外部 API + 自前フォールバック |
@@ -164,7 +164,7 @@ src/
     index.astro               # トップページ（スプレッド選択 + カード選択）
     result.astro              # 結果表示ページ（任意）
     api/
-      reading.ts              # タロット解釈 API（OpenRouter プロキシ）
+      reading.ts              # タロット解釈 API（Groq プロキシ）
   components/
     islands/
       SpreadSelector.tsx      # スプレッド選択（1枚/3枚）
@@ -193,8 +193,8 @@ astro.config.mjs              # server output + cloudflare adapter + env schema
 4. 正位置/逆位置をランダム判定
 5. カードデータを取得（外部 API → フォールバック）
 6. `/api/reading` にカード・悩み・スプレッドを POST
-7. サーバーが OpenRouter にプロンプトを送信し、ストリーミングで解釈を生成
-8. クライアントが SSE を解析し、解釈文を逐次表示
+7. サーバーが Groq にプロンプトを送信し、JSON 形式で解釈を生成
+8. サーバーが応答を検証して整形し、クライアントが解釈文を表示
 
 ### 6.2 API Request / Response
 
@@ -209,10 +209,7 @@ astro.config.mjs              # server output + cloudflare adapter + env schema
 }
 ```
 
-**Response**: SSE ストリーム（OpenRouter 互換）
-```
-data: { "choices": [{ "delta": { "content": "..." } }] }
-```
+**Response**: JSON (`{ "reading": "..." }`)
 
 **Error Response**:
 ```json
@@ -243,14 +240,14 @@ data: { "choices": [{ "delta": { "content": "..." } }] }
 - **レートリミット**: IP ベース（例：12 リクエスト / 5 分）
 - **シークレット管理**:
   - 開発: `.env` または `.dev.vars`
-  - 本番: `npx wrangler secret put OPENROUTER_API_KEY`, `npx wrangler secret put LLM_MODEL`
+  - 本番: `npx wrangler secret put GROQ_API_KEY`, `npx wrangler secret put LLM_MODEL`
 - **免責**: UI とプロンプトの両方で「エンターテイメント・内省のきっかけであり、専門的な助言ではない」を明記
 - **著作権**: Rider-Waite-Smith 画像はパブリックドメイン扱いのものを使用し、出典を明記
 
 ## 9. 非機能要件
 
-- パフォーマンス：ストリーミングで体感速度を優先
-- コスト：ユーザーの無料枠を最優先に守る（レートリミット + `openrouter/free`）
+- パフォーマンス：Groq の応答をタイムアウト付きで取得
+- コスト：レートリミット（12 リクエスト / 5 分）で利用を制御
 - 保守性：既存の `app/` / `ai` / `paperlevels` エコシステムに溶け込む
 - 倫理：安全・同意・違法行為の拒否を最優先
 
