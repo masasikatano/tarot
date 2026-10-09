@@ -318,7 +318,7 @@ export default function TarotApp() {
 
         <footer className="tarot-footer">
           <div>占いは利用者の特定の目的に適合すること、期待する結果・正確性・実現性を有すること及び不都合が生じない事について、何らの保証をするものではありません。</div>
-          <div>© TarotScryer</div>
+          <div>© TarotScryer · <a href="https://nume.scryer.workers.dev/" target="_blank" rel="noopener noreferrer">姉妹サイト: Nume（数秘術占い）</a></div>
         </footer>
       </main>
     </div>
